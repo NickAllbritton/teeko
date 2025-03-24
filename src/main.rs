@@ -1,4 +1,5 @@
 mod view;
+mod model;
 
 
 fn main() -> Result<(), String> {
