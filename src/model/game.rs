@@ -5,7 +5,7 @@ pub enum BoardPiece {
     Black
 }
 
-pub fn make_blank_board() -> [[BoardPiece; 5]; 5]; {
+pub fn make_blank_board() -> [[BoardPiece; 5]; 5] {
     return [[BoardPiece::None; 5]; 5];
 }
 
