@@ -25,7 +25,8 @@ impl Renderer {
         // So simplify to 2xCell width (and similarly for height)
         let left: i32 = self.scrn_area.w/2 - 2*cell_width; // x-position of left side of centered board
         let top: i32 = self.scrn_area.h/2 - 2*cell_height; // y-position of top side of centered board
-        // Then subtracting left from screen width is algebraically equivalent to the right side. 
+        let right: i32 = self.scrn_area.w/2 + 2*cell_width;
+        let bottom: i32 = self.scrn_area.h/2 + 2*cell_height;
 
         for i in 0..5 {
             // Draw the horizontal lines of the board 
@@ -42,18 +43,21 @@ impl Renderer {
 
         }
         // To some extent this is stylistic. I am drawing only 6 diagonal lines out of 14
+        // If you choose to draw all the lines in the future: Do not draw the lines directly
+        // Instead loop through 3 iterations and draw the rectangles traced by all the diagonal
+        // lines
         // Draw the down and rightwards diagonal lines of the board
         canvas.draw_line(
             Point::new(left, top + cell_height*2),
-            Point::new(left + cell_width*2, self.scrn_area.h - top)
+            Point::new(left + cell_width*2, bottom)
         );
         canvas.draw_line(
             Point::new(left, top),
-            Point::new(self.scrn_area.w - left, self.scrn_area.h - top)
+            Point::new(right, bottom)
         );
         canvas.draw_line(
             Point::new(left + cell_width*2, top),
-            Point::new(self.scrn_area.w - left, top + cell_height*2)
+            Point::new(right, top + cell_height*2)
         );
         // Draw the up and rightwards diagonal lines of the board
         canvas.draw_line(
@@ -61,12 +65,12 @@ impl Renderer {
             Point::new(left + cell_width*2, top)
         );
         canvas.draw_line(
-            Point::new(left, self.scrn_area.h - top),
-            Point::new(self.scrn_area.w - left, top)
+            Point::new(left, bottom),
+            Point::new(right, top)
         );
         canvas.draw_line(
-            Point::new(left + cell_width*2, self.scrn_area.h - top),
-            Point::new(self.scrn_area.w - left, top + cell_height*2)
+            Point::new(left + cell_width*2, bottom),
+            Point::new(right, top + cell_height*2)
         );
     }
 }
