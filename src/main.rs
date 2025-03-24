@@ -19,7 +19,7 @@ fn main() -> Result<(), String> {
 
     let board_view: view::board_view::Renderer = view::board_view::Renderer {
         scrn_area: sdl2::rect::Rect::new(0, 0, scrn_width, scrn_height),
-        clear_color: sdl2::pixels::Color::RGB(148, 103, 128)
+        clear_color: sdl2::pixels::Color::RGB(158, 103, 68)
     };
 
     let mut running: bool = true;
