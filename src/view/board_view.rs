@@ -38,7 +38,35 @@ impl Renderer {
                 Point::new(left + i*cell_width, top),
                 Point::new(left + i*cell_width, self.scrn_area.h - top)
             ).ok().unwrap_or_default();
+            
 
         }
+        // To some extent this is stylistic. I am drawing only 6 diagonal lines out of 14
+        // Draw the down and rightwards diagonal lines of the board
+        canvas.draw_line(
+            Point::new(left, top + cell_height*2),
+            Point::new(left + cell_width*2, self.scrn_area.h - top)
+        );
+        canvas.draw_line(
+            Point::new(left, top),
+            Point::new(self.scrn_area.w - left, self.scrn_area.h - top)
+        );
+        canvas.draw_line(
+            Point::new(left + cell_width*2, top),
+            Point::new(self.scrn_area.w - left, top + cell_height*2)
+        );
+        // Draw the up and rightwards diagonal lines of the board
+        canvas.draw_line(
+            Point::new(left, top + cell_height*2),
+            Point::new(left + cell_width*2, top)
+        );
+        canvas.draw_line(
+            Point::new(left, self.scrn_area.h - top),
+            Point::new(self.scrn_area.w - left, top)
+        );
+        canvas.draw_line(
+            Point::new(left + cell_width*2, self.scrn_area.h - top),
+            Point::new(self.scrn_area.w - left, top + cell_height*2)
+        );
     }
 }
