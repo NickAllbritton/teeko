@@ -4,6 +4,7 @@ use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::model::game::BoardPiece;
 
 pub struct Renderer {
     pub scrn_area: Rect,
@@ -12,11 +13,20 @@ pub struct Renderer {
 
 impl Renderer {
 
-    pub fn render(&self, canvas: &mut Canvas<Window>) {
+    pub fn render(&self, canvas: &mut Canvas<Window>, board: &[[BoardPiece; 5]; 5]) {
         canvas.set_draw_color(self.clear_color);
         canvas.fill_rect(self.scrn_area).ok().unwrap_or_default();
 
         canvas.set_draw_color(Color::RGB(0, 0, 0));
+        
+        // Draw the horizontal and vertical lines of the board
+        self.draw_lines(canvas);
+
+        // Draw the pieces 
+        self.draw_pieces(canvas, board);
+    }
+
+    fn draw_lines(&self, canvas: &mut Canvas<Window>) {
 
         let cell_width: i32 = self.scrn_area.h / 5;
         let cell_height: i32 = self.scrn_area.h / 5;
@@ -72,5 +82,66 @@ impl Renderer {
             Point::new(left + cell_width*2, bottom),
             Point::new(right, top + cell_height*2)
         );
+
+    }
+
+    fn draw_pieces(&self, canvas: &mut Canvas<Window>, board: &[[BoardPiece; 5]; 5]) {
+
+        let width: i32 = self.scrn_area.h / 5;
+        let height: i32 = self.scrn_area.h / 5;
+
+        for i in 0i32..5 {
+            let row: usize = i.try_into().unwrap();
+            for j in 0i32..5 {
+                let col: usize = j.try_into().unwrap();
+                if board[row][col] != BoardPiece::None {
+                    let mut c = Color::RGB(25, 30, 30);
+                    if board[row][col] == BoardPiece::Red {
+                        c = Color::RGB(140, 35, 25);
+                    }
+                    let rect = Rect::new(width/4 + width*(j+1), height/4 + height*i, 
+                            (width/2).try_into().unwrap(), (height/2).try_into().unwrap());
+                    canvas.set_draw_color(c);
+                    canvas.fill_rect(rect).ok().unwrap_or_default();
+
+                }
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -22,9 +22,12 @@ fn main() -> Result<(), String> {
         clear_color: sdl2::pixels::Color::RGB(158, 103, 68)
     };
 
+    let mut game_state: model::game::GameState = model::game::GameState{ board: model::game::make_blank_board() };
     let mut running: bool = true;
     let mut event_queue = sdl_context.event_pump().unwrap();
-    
+   
+    game_state.jumbl_board();
+
     while running {
 
         for event in event_queue.poll_iter() {
@@ -36,7 +39,7 @@ fn main() -> Result<(), String> {
             }
         }
         
-        board_view.render(&mut canvas);
+        board_view.render(&mut canvas, &game_state.board);
 
         canvas.present();
     }

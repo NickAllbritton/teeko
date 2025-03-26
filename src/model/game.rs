@@ -1,4 +1,4 @@
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub enum BoardPiece {
     None,
     Red,
@@ -19,6 +19,8 @@ impl GameState {
         // TODO: Actually jumble the board lol
         self.board[1][0] = BoardPiece::Red;
         self.board[2][0] = BoardPiece::Black;
+        self.board[4][4] = BoardPiece::Red;
+        self.board[3][2] = BoardPiece::Black;
     }
 
 }
