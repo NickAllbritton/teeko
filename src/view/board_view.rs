@@ -89,6 +89,12 @@ impl Renderer {
 
         let width: i32 = self.scrn_area.h / 5;
         let height: i32 = self.scrn_area.h / 5;
+        // Board width: (4 spaces between 5 lines)x(Cell width)
+        // Centering of board involves halving the board width which is a factor of 4.
+        // So simplify to 2xCell width (and similarly for height)
+        let left: i32 = self.scrn_area.w/2 - 2*width; // x-position of left side of centered board
+        let top: i32 = self.scrn_area.h/2 - 2*height; // y-position of top side of centered board
+
 
         for i in 0i32..5 {
             let row: usize = i.try_into().unwrap();
@@ -99,7 +105,7 @@ impl Renderer {
                     if board[row][col] == BoardPiece::Red {
                         c = Color::RGB(140, 35, 25);
                     }
-                    let rect = Rect::new(width/4 + width*(j+1), height/4 + height*i, 
+                    let rect = Rect::new(left - width/4 + width*j, top - height/4 + height*i, 
                             (width/2).try_into().unwrap(), (height/2).try_into().unwrap());
                     canvas.set_draw_color(c);
                     canvas.fill_rect(rect).ok().unwrap_or_default();
