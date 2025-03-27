@@ -5,6 +5,7 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::model::game::BoardPiece;
+use crate::utils::shapes::Circle;
 
 pub struct Renderer {
     pub scrn_area: Rect,
@@ -105,11 +106,10 @@ impl Renderer {
                     if board[row][col] == BoardPiece::Red {
                         c = Color::RGB(140, 35, 25);
                     }
-                    let rect = Rect::new(left - width/4 + width*j, top - height/4 + height*i, 
-                            (width/2).try_into().unwrap(), (height/2).try_into().unwrap());
-                    canvas.set_draw_color(c);
-                    canvas.fill_rect(rect).ok().unwrap_or_default();
-
+                    //let rect = Rect::new(left - width/4 + width*j, top - height/4 + height*i, 
+                    //        (width/2).try_into().unwrap(), (height/2).try_into().unwrap());
+                    let circle: Circle = Circle {center: Point::new(left + width*j, top + height*i), radius: width/3, color: c};
+                    circle.draw(canvas);
                 }
             }
         }

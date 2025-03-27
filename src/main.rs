@@ -1,5 +1,6 @@
 mod view;
 mod model;
+mod utils;
 
 
 fn main() -> Result<(), String> {
