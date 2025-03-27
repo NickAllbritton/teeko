@@ -46,6 +46,14 @@ fn main() -> Result<(), String> {
 
                     game_state.handle_click(row, col);
                 }
+                sdl2::event::Event::KeyDown { keycode, .. } => {
+                    if keycode.unwrap() == sdl2::keyboard::Keycode::U {
+                        game_state.undo_action();
+                    }
+                    else if keycode.unwrap() == sdl2::keyboard::Keycode::R {
+                        game_state.redo_action();
+                    }
+                }
 
                 _ => {}
             }
