@@ -25,7 +25,7 @@ fn main() -> Result<(), String> {
 
     let mut game_state: model::game::GameState = model::game::GameState{ 
         board: model::game::make_blank_board(),
-        current_player: model::game::BoardPiece::Red,
+        current_player: model::game::BoardPiece::Black, // black moves first
         pieces_dropped: [0, 0]
     };
     let mut running: bool = true;

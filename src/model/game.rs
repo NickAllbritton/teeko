@@ -32,6 +32,10 @@ impl GameState {
         if self.pieces_dropped[self.index_of_piece(self.current_player)] >= 4 {
             return;
         }
+        // First move cannot be the center of the board
+        if self.pieces_dropped[self.index_of_piece(BoardPiece::Black)] == 0 && row == 2 && col == 2 {
+            return;
+        }
         if self.board[row][col] != BoardPiece::None {
             return;
         }
@@ -51,7 +55,7 @@ impl GameState {
     }
 
     fn index_of_piece(&self, piece: BoardPiece) -> usize {
-        if piece == BoardPiece::Red {
+        if piece == BoardPiece::Black {
             return 0;
         }
         return 1;
