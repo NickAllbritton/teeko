@@ -23,4 +23,12 @@ impl GameState {
         self.board[3][2] = BoardPiece::Black;
     }
 
+    pub fn handle_click(&mut self, row: usize, col: usize) {
+        if row > 4 || col > 4 {
+            return;
+        }
+
+        self.board[row][col] = BoardPiece::Red;
+    }
+
 }

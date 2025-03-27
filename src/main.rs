@@ -36,6 +36,16 @@ fn main() -> Result<(), String> {
                 sdl2::event::Event::Quit {..} => {
                     running = false;
                 }
+                sdl2::event::Event::MouseButtonDown {x, y, ..} => {
+                    let centerx: i32 = board_view.scrn_area.w / 2;
+                    let centery: i32 = board_view.scrn_area.h / 2;
+                    let cell_side: i32 = board_view.scrn_area.h / 5;
+                    let col: usize = (2 + (x-centerx)/cell_side).try_into().unwrap();
+                    let row: usize = (2 + (y-centery)/cell_side).try_into().unwrap();
+
+                    game_state.handle_click(row, col);
+                }
+
                 _ => {}
             }
         }
