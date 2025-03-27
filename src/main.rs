@@ -41,11 +41,14 @@ fn main() -> Result<(), String> {
                     running = false;
                 }
                 sdl2::event::Event::MouseButtonDown {x, y, ..} => {
-                    let centerx: i32 = board_view.scrn_area.w / 2;
-                    let centery: i32 = board_view.scrn_area.h / 2;
-                    let cell_side: i32 = board_view.scrn_area.h / 5;
-                    let col: usize = (2 + (x-centerx)/cell_side).try_into().unwrap();
-                    let row: usize = (2 + (y-centery)/cell_side).try_into().unwrap();
+                    let x_from_left: i32 = x - board_view.scrn_area.x;
+                    let y_from_top: i32 = y - board_view.scrn_area.y;
+                    let click_radius: i32 = board_view.scrn_area.w / 12; // The radius of the click
+                    let cell_side: i32 = board_view.scrn_area.w / 4;
+                    let x_shifted: i32 = x_from_left + click_radius;
+                    let y_shifted: i32 = y_from_top + click_radius;
+                    let col: usize = (x_shifted/cell_side).try_into().unwrap();
+                    let row: usize = (y_shifted/cell_side).try_into().unwrap();
 
                     game_state.handle_click(row, col);
                 }
