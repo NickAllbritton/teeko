@@ -18,16 +18,10 @@ fn main() -> Result<(), String> {
         .build()
         .unwrap();
 
-    let board_view: view::board_view::Renderer = view::board_view::Renderer {
-        scrn_area: sdl2::rect::Rect::new((scrn_width/2 - 2*scrn_height/5).try_into().unwrap(), (scrn_height/10).try_into().unwrap(), scrn_height/5 * 4, scrn_height/5 * 4),
-        clear_color: sdl2::pixels::Color::RGB(158, 103, 68)
-    };
+    let board_view: view::board_view::Renderer 
+        = view::board_view::Renderer::new((scrn_width/2 - 2*scrn_height/5).try_into().unwrap(), (scrn_height/10).try_into().unwrap(), scrn_height/5 * 4, scrn_height/5 * 4);
 
-    let mut game_state: model::game::GameState = model::game::GameState{ 
-        board: model::game::make_blank_board(),
-        current_player: model::game::BoardPiece::Black, // black moves first
-        pieces_dropped: [0, 0]
-    };
+    let mut game_state: model::game::GameState = model::game::GameState::new();
     let mut running: bool = true;
     let mut event_queue = sdl_context.event_pump().unwrap();
    

@@ -17,6 +17,14 @@ pub struct GameState {
 
 impl GameState {
 
+    pub fn new() -> Self {
+        Self {
+            board: make_blank_board(),
+            current_player: BoardPiece::Black, // Black moves First
+            pieces_dropped: [0, 0]
+        }
+    }
+
     pub fn jumbl_board(&mut self) {
         // TODO: Actually jumble the board lol
         self.board[1][0] = BoardPiece::Red;

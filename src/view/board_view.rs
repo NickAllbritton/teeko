@@ -14,6 +14,12 @@ pub struct Renderer {
 
 impl Renderer {
 
+    pub fn new(posx: i32, posy: i32, width: u32, height: u32) -> Self {
+        Self {
+            scrn_area: Rect::new(posx, posy, width, height),
+            clear_color: Color::RGB(158, 103, 68)
+        }
+    }
     pub fn render(&self, canvas: &mut Canvas<Window>, board: &[[BoardPiece; 5]; 5]) {
         canvas.set_draw_color(Color::RGB(100, 120, 120));
         canvas.clear(); // Paint the background color
