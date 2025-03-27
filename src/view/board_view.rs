@@ -15,11 +15,14 @@ pub struct Renderer {
 impl Renderer {
 
     pub fn render(&self, canvas: &mut Canvas<Window>, board: &[[BoardPiece; 5]; 5]) {
-        canvas.set_draw_color(self.clear_color);
+        canvas.set_draw_color(Color::RGB(100, 120, 120));
+        canvas.clear(); // Paint the background color
+        canvas.set_draw_color(self.clear_color); // Color of the board
         canvas.fill_rect(self.scrn_area).ok().unwrap_or_default();
 
+        // Color of lines to draw
         canvas.set_draw_color(Color::RGB(0, 0, 0));
-        
+
         // Draw the horizontal and vertical lines of the board
         self.draw_lines(canvas);
 
@@ -29,26 +32,23 @@ impl Renderer {
 
     fn draw_lines(&self, canvas: &mut Canvas<Window>) {
 
-        let cell_width: i32 = self.scrn_area.h / 5;
-        let cell_height: i32 = self.scrn_area.h / 5;
-        // Board width: (4 spaces between 5 lines)x(Cell width)
-        // Centering of board involves halving the board width which is a factor of 4.
-        // So simplify to 2xCell width (and similarly for height)
-        let left: i32 = self.scrn_area.w/2 - 2*cell_width; // x-position of left side of centered board
-        let top: i32 = self.scrn_area.h/2 - 2*cell_height; // y-position of top side of centered board
-        let right: i32 = self.scrn_area.w/2 + 2*cell_width;
-        let bottom: i32 = self.scrn_area.h/2 + 2*cell_height;
+        let cell_width: i32 = self.scrn_area.w / 4;
+        let cell_height: i32 = self.scrn_area.h / 4;
+        let left: i32 = self.scrn_area.x; // x-position of left side of centered board
+        let top: i32 = self.scrn_area.y; // y-position of top side of centered board
+        let right: i32 = left + 4*cell_width;
+        let bottom: i32 = top + 4*cell_height;
 
         for i in 0..=4 {
             // Draw the horizontal lines of the board 
             canvas.draw_line(
                 Point::new(left, top + i*cell_height),
-                Point::new(self.scrn_area.w - left, top + i*cell_height)
+                Point::new(right, top + i*cell_height)
             ).ok().unwrap_or_default();
             // Draw the horizontal lines of the board
             canvas.draw_line(
                 Point::new(left + i*cell_width, top),
-                Point::new(left + i*cell_width, self.scrn_area.h - top)
+                Point::new(left + i*cell_width, bottom)
             ).ok().unwrap_or_default();
             
 
@@ -87,14 +87,14 @@ impl Renderer {
     }
 
     fn draw_pieces(&self, canvas: &mut Canvas<Window>, board: &[[BoardPiece; 5]; 5]) {
-
-        let width: i32 = self.scrn_area.h / 5;
-        let height: i32 = self.scrn_area.h / 5;
+        // Dimensions of a cell
+        let width: i32 = self.scrn_area.h / 4;
+        let height: i32 = self.scrn_area.h / 4;
         // Board width: (4 spaces between 5 lines)x(Cell width)
         // Centering of board involves halving the board width which is a factor of 4.
         // So simplify to 2xCell width (and similarly for height)
-        let left: i32 = self.scrn_area.w/2 - 2*width; // x-position of left side of centered board
-        let top: i32 = self.scrn_area.h/2 - 2*height; // y-position of top side of centered board
+        let left: i32 = self.scrn_area.x; // x-position of left side of centered board
+        let top: i32 = self.scrn_area.y; // y-position of top side of centered board
 
 
         for i in 0i32..=4 {

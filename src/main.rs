@@ -19,15 +19,19 @@ fn main() -> Result<(), String> {
         .unwrap();
 
     let board_view: view::board_view::Renderer = view::board_view::Renderer {
-        scrn_area: sdl2::rect::Rect::new(0, 0, scrn_width, scrn_height),
+        scrn_area: sdl2::rect::Rect::new((scrn_width/2 - 2*scrn_height/5).try_into().unwrap(), (scrn_height/10).try_into().unwrap(), scrn_height/5 * 4, scrn_height/5 * 4),
         clear_color: sdl2::pixels::Color::RGB(158, 103, 68)
     };
 
-    let mut game_state: model::game::GameState = model::game::GameState{ board: model::game::make_blank_board() };
+    let mut game_state: model::game::GameState = model::game::GameState{ 
+        board: model::game::make_blank_board(),
+        current_player: model::game::BoardPiece::Red,
+        pieces_dropped: [0, 0]
+    };
     let mut running: bool = true;
     let mut event_queue = sdl_context.event_pump().unwrap();
    
-    game_state.jumbl_board();
+    //game_state.jumbl_board();
 
     while running {
 
