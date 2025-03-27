@@ -39,7 +39,7 @@ impl Renderer {
         let right: i32 = self.scrn_area.w/2 + 2*cell_width;
         let bottom: i32 = self.scrn_area.h/2 + 2*cell_height;
 
-        for i in 0..5 {
+        for i in 0..=4 {
             // Draw the horizontal lines of the board 
             canvas.draw_line(
                 Point::new(left, top + i*cell_height),
@@ -97,9 +97,9 @@ impl Renderer {
         let top: i32 = self.scrn_area.h/2 - 2*height; // y-position of top side of centered board
 
 
-        for i in 0i32..5 {
+        for i in 0i32..=4 {
             let row: usize = i.try_into().unwrap();
-            for j in 0i32..5 {
+            for j in 0i32..=4 {
                 let col: usize = j.try_into().unwrap();
                 if board[row][col] != BoardPiece::None {
                     let mut c = Color::RGB(25, 30, 30);

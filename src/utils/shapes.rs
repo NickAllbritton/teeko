@@ -19,9 +19,6 @@ impl Circle {
         let top: i32 = self.center.y() - self.radius;
         let right: i32 = self.center.x() + self.radius;
         let bottom: i32 = self.center.y() + self.radius;
-
-        let xrange = std::ops::Range{ start: left, end: right };
-        let yrange = std::ops::Range{ start: top, end: bottom};
         
         canvas.set_draw_color(self.color);
 

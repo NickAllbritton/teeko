@@ -10,7 +10,7 @@ fn main() -> Result<(), String> {
 
     let sdl_context = sdl2::init()?;
     let vid_subsystem = sdl_context.video()?;
-    let wnd = vid_subsystem.window("Rust!", scrn_width, scrn_height)
+    let wnd = vid_subsystem.window("Teeko", scrn_width, scrn_height)
         .build()
         .unwrap();
     
