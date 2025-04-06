@@ -20,7 +20,10 @@ impl<'a> Renderer<'a> {
 
     pub fn new(posx: i32, posy: i32, width: u32, height: u32, tex_creator: &'a TextureCreator<WindowContext>) -> Result<Self, sdl2::Error> {
 
-        let grain_texture = tex_creator.load_texture("resources/wood_texture.png");
+        //let grain_texture = tex_creator.load_texture("resources/wood_texture1.png");
+        //let grain_texture = tex_creator.load_texture("resources/wood_texture2.png");
+        let grain_texture = tex_creator.load_texture("resources/wood_panel_texture.png");
+
         let piece_texture = tex_creator.load_texture("resources/checkers_piece_texture.png");
         Ok(Self {
             board_area: Rect::new(posx, posy, width, height),
@@ -53,11 +56,12 @@ impl<'a> Renderer<'a> {
         let image = &self.board_wood_grain;
         let image_attr = image.query();
 
-        let src_rect = Rect::new(0, 0, image_attr.width, image_attr.height);
-
+//        let src_rect = Rect::new(0, 0, image_attr.width, image_attr.height);
+        // Take a square of the texture
+        let src_rect = Rect::new(0, 0, image_attr.width, image_attr.width);
+        // Copy it to the position and size of the board
         let dest_rect = Rect::new(self.board_area.x(), self.board_area.y(), 
                         self.board_area.width(), self.board_area.height());
-
         canvas.copy(image, src_rect, dest_rect).ok().unwrap();
     }
 
