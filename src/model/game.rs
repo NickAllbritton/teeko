@@ -13,6 +13,7 @@ pub struct GameState {
     pub board: [[BoardPiece; 5]; 5],
     pub current_player: BoardPiece,
     pub pieces_dropped: [i32;2],
+    pub phase2: bool,
     history: Vec<PieceDropCommand>,
     history_pos: usize
 }
@@ -24,6 +25,7 @@ impl GameState {
             board: make_blank_board(),
             current_player: BoardPiece::Black, // Black moves First
             pieces_dropped: [0, 0],
+            phase2: false, // Begin in phase 1 not phase 2 because 2 is after 1
             history: Vec::new(),
             history_pos: 0
         }
@@ -45,6 +47,7 @@ impl GameState {
             }
         }
         command.perform(self);
+        self.change_phase_if_nec();
         self.history.push(command);
         self.history_pos = self.history.len() - 1;
     }
@@ -58,6 +61,7 @@ impl GameState {
 
         let command: PieceDropCommand = self.history[self.history_pos].copy();
         command.perform(self);
+        self.change_phase_if_nec();
     }
 
     pub fn undo_action(&mut self) {
@@ -71,8 +75,15 @@ impl GameState {
             command.undo(self);
             if self.history_pos > 0 {
                 self.history_pos -= 1;
+                self.change_phase_if_nec();
             }
         }
+    }
+
+    fn change_phase_if_nec(&mut self)
+    {
+        // if at least 8 pieces have been dropped -> go phase2
+        self.phase2 = self.pieces_dropped[0] + self.pieces_dropped[1] >= 8; 
     }
 
     fn next_player(&mut self) {
@@ -130,7 +141,7 @@ impl PieceDropCommand {
         if game.board[self.row][self.col] != BoardPiece::None {
             return false;
         }
-        return true;
+        return !game.phase2; // you cannot place a new piece unless you are in phase 1
     }
 
     pub fn copy(&self) -> Self {
