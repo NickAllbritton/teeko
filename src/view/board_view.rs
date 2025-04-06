@@ -47,12 +47,12 @@ impl Renderer {
 
         for i in 0..=4 {
             // Draw the horizontal lines of the board 
-            canvas.draw_line(
+            let _ = canvas.draw_line(
                 Point::new(left, top + i*cell_height),
                 Point::new(right, top + i*cell_height)
             ).ok().unwrap_or_default();
             // Draw the horizontal lines of the board
-            canvas.draw_line(
+            let _ = canvas.draw_line(
                 Point::new(left + i*cell_width, top),
                 Point::new(left + i*cell_width, bottom)
             ).ok().unwrap_or_default();
@@ -64,28 +64,28 @@ impl Renderer {
         // Instead loop through 3 iterations and draw the rectangles traced by all the diagonal
         // lines
         // Draw the down and rightwards diagonal lines of the board
-        canvas.draw_line(
+        let _ = canvas.draw_line(
             Point::new(left, top + cell_height*2),
             Point::new(left + cell_width*2, bottom)
         );
-        canvas.draw_line(
+        let _ = canvas.draw_line(
             Point::new(left, top),
             Point::new(right, bottom)
         );
-        canvas.draw_line(
+        let _ = canvas.draw_line(
             Point::new(left + cell_width*2, top),
             Point::new(right, top + cell_height*2)
         );
         // Draw the up and rightwards diagonal lines of the board
-        canvas.draw_line(
+        let _ = canvas.draw_line(
             Point::new(left, top + cell_height*2),
             Point::new(left + cell_width*2, top)
         );
-        canvas.draw_line(
+        let _ = canvas.draw_line(
             Point::new(left, bottom),
             Point::new(right, top)
         );
-        canvas.draw_line(
+        let _ = canvas.draw_line(
             Point::new(left + cell_width*2, bottom),
             Point::new(right, top + cell_height*2)
         );
@@ -121,39 +121,5 @@ impl Renderer {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

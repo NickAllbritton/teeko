@@ -24,14 +24,14 @@ impl Circle {
 
         for y in top..=bottom {
             for x in left..=right {
-                if self.inCircle(x, y) {
-                   canvas.draw_point(Point::new(x, y)); 
+                if self.in_circle(x, y) {
+                   let _ = canvas.draw_point(Point::new(x, y)); 
                 }
             }
         }
     }
 
-    pub fn inCircle(&self, x: i32, y: i32) -> bool {
+    pub fn in_circle(&self, x: i32, y: i32) -> bool {
        return (x - self.center.x()).pow(2) + (y - self.center.y()).pow(2) <= self.radius.pow(2);
     }
 }

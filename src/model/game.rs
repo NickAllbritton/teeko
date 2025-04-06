@@ -121,9 +121,6 @@ impl PieceDropCommand {
         if self.row > 4 || self.col > 4 {
             return false;
         }
-        if game.pieces_dropped[game.index_of_piece(game.current_player)] >= 4 {
-            return false;
-        }
         // First move cannot be the center of the board
         if game.pieces_dropped[game.index_of_piece(BoardPiece::Black)] == 0 
             && self.row == 2 && self.col == 2 {
