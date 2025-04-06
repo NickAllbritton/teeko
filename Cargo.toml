@@ -3,5 +3,7 @@ name = "teeko"
 version = "0.1.0"
 edition = "2021"
 
-[dependencies]
-sdl2 = "*"
+[dependencies.sdl2]
+default-features = false
+features = ["image"]
+version = "0.37"
