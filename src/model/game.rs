@@ -69,9 +69,10 @@ impl GameState {
 
         if self.history.len() != 0 {
             command.undo(self);
-            self.history_pos -= 1;
+            if self.history_pos > 0 {
+                self.history_pos -= 1;
+            }
         }
-
     }
 
     fn next_player(&mut self) {
