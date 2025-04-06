@@ -38,6 +38,7 @@ impl GameState {
             player: self.current_player
         }; 
         if !command.is_valid(self) {
+            println!("Invalid move!");
             return;
         }
         if self.history.len() > 0 {
@@ -112,10 +113,19 @@ struct PieceDropCommand {
 impl PieceDropCommand {
 
     pub fn perform(&self, game: &mut GameState) {
-        game.pieces_dropped[game.index_of_piece(game.current_player)] += 1; // Add a piece to the
-                                                                           // tracker variable
-        game.board[self.row][self.col] = game.current_player;
-        game.next_player();
+        if game.phase2 {
+            game.board[self.row][self.col] = BoardPiece::None;
+            game.pieces_dropped[game.index_of_piece(game.current_player)] -= 1; // Remove a piece 
+            game.current_player = self.player;
+            println!("Perform piece remove");
+        }
+        else {
+            game.board[self.row][self.col] = game.current_player;
+            game.pieces_dropped[game.index_of_piece(game.current_player)] += 1; // Add a piece to the
+                                                                                // tracker variable
+            game.next_player();
+            println!("Perform piece placement");
+        }
     }
 
     pub fn undo(&self, game: &mut GameState) {
@@ -138,10 +148,13 @@ impl PieceDropCommand {
             && self.row == 2 && self.col == 2 {
             return false;
         }
-        if game.board[self.row][self.col] != BoardPiece::None {
+        if game.board[self.row][self.col] != BoardPiece::None && !game.phase2 {
             return false;
         }
-        return !game.phase2; // you cannot place a new piece unless you are in phase 1
+        if game.board[self.row][self.col] != self.player && game.phase2 {
+            return false;
+        }
+        return true; // you cannot place a new piece unless you are in phase 1
     }
 
     pub fn copy(&self) -> Self {
