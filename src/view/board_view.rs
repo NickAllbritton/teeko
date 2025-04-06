@@ -12,7 +12,8 @@ use crate::utils::shapes::Circle;
 pub struct Renderer<'a> {
     pub board_area: Rect,
     pub board_color: Color,
-    board_wood_grain: Texture<'a>
+    board_wood_grain: Texture<'a>,
+    pieces_texture: Texture<'a>
 }
 
 impl<'a> Renderer<'a> {
@@ -20,10 +21,12 @@ impl<'a> Renderer<'a> {
     pub fn new(posx: i32, posy: i32, width: u32, height: u32, tex_creator: &'a TextureCreator<WindowContext>) -> Result<Self, sdl2::Error> {
 
         let grain_texture = tex_creator.load_texture("resources/wood_texture.png");
+        let piece_texture = tex_creator.load_texture("resources/checkers_piece_texture.png");
         Ok(Self {
             board_area: Rect::new(posx, posy, width, height),
             board_color: Color::RGB(158, 103, 68),
-            board_wood_grain: grain_texture.expect("Something went wrong with loading the texture!")
+            board_wood_grain: grain_texture.expect("Something went wrong with loading the texture!"),
+            pieces_texture: piece_texture.expect("Something went wrong with loading the piece texture!")
         })
     }
 
@@ -124,6 +127,15 @@ impl<'a> Renderer<'a> {
         let left: i32 = self.board_area.x; // x-position of left side of centered board
         let top: i32 = self.board_area.y; // y-position of top side of centered board
 
+        let image = &self.pieces_texture;
+        let image_attr = image.query();
+
+
+
+        let src_rect = Rect::new(0, 0, image_attr.width, image_attr.height);
+        let mut dest_rect = Rect::new(0, 0, 
+            (2*width/3).try_into().unwrap(), 
+            (2*width/3).try_into().unwrap()); // Create a destination rect at position 0 with same width as the pieces' diameter
 
         for i in 0i32..=4 {
             let row: usize = i.try_into().unwrap();
@@ -138,6 +150,9 @@ impl<'a> Renderer<'a> {
                     //        (width/2).try_into().unwrap(), (height/2).try_into().unwrap());
                     let circle: Circle = Circle {center: Point::new(left + width*j, top + height*i), radius: width/3, color: c};
                     circle.draw(canvas);
+                    dest_rect.set_x(left + width*j - dest_rect.w/2);
+                    dest_rect.set_y(top + height*i - dest_rect.h/2);
+                    canvas.copy(image, src_rect, dest_rect).ok().unwrap();
                 }
             }
         }
