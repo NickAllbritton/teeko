@@ -34,9 +34,6 @@ impl<'a> Renderer<'a> {
     }
 
     pub fn render(&self, canvas: &mut Canvas<Window>, board: &[[BoardPiece; 5]; 5]) {
-        // Cool blue background color. Clear screen with this color set to draw
-        canvas.set_draw_color(Color::RGB(100, 120, 120));
-        canvas.clear(); // Paint the background color
         canvas.set_draw_color(self.board_color); // Color of the board
         canvas.fill_rect(self.board_area).ok().unwrap_or_default();
 

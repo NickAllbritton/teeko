@@ -2,7 +2,7 @@ mod view;
 mod model;
 mod utils;
 
-
+use sdl2::image::LoadTexture;
 
 fn main() -> Result<(), String> {
   
@@ -26,6 +26,13 @@ fn main() -> Result<(), String> {
             (scrn_height/10).try_into().unwrap(), 
             scrn_height/5 * 4, scrn_height/5 * 4,
             &texture_creator).expect("Failed to create the renderer");
+
+    let background_texture = texture_creator.load_texture("resources/timber_planks.png").expect("Loading background texture");
+    let image_attr = background_texture.query();
+    // Cut a source rect rom the texture
+    let src_rect = sdl2::rect::Rect::new((image_attr.width - (scrn_width/scrn_height*image_attr.height)).try_into().unwrap(), 0, 
+        (scrn_width/scrn_height*image_attr.height).try_into().unwrap(), (image_attr.height).try_into().unwrap());
+    let dest_rect = sdl2::rect::Rect::new(0, 0, scrn_width, scrn_height);
 
     let mut game_state: model::game::GameState = model::game::GameState::new();
     let mut running: bool = true;
@@ -65,6 +72,15 @@ fn main() -> Result<(), String> {
             }
         }
         
+
+        // Cool blue background color. Clear screen with this color set to draw
+        canvas.set_draw_color(sdl2::pixels::Color::RGB(100, 120, 120));
+        canvas.clear(); // Paint the background color
+
+        // THE FOLLOWING LINE WILL CRASH THE PROGRAM IF WINDOW IS RESIZED TOO MUCH
+        // USERS BEWARE
+        // Copy background planks texture into the destination rect: the screen area
+        canvas.copy(&background_texture, src_rect, dest_rect)?;       
         board_view.render(&mut canvas, &game_state.board);
 
         canvas.present();
