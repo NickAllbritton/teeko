@@ -6,8 +6,8 @@ use sdl2::image::LoadTexture;
 
 fn main() -> Result<(), String> {
   
-    let scrn_width: u32 = 1800;
-    let scrn_height: u32= 1350;
+    let scrn_width: u32 = 1600;
+    let scrn_height: u32= 1250;
 
     let sdl_context = sdl2::init()?;
     let vid_subsystem = sdl_context.video()?;
@@ -23,7 +23,7 @@ fn main() -> Result<(), String> {
 
     let board_view: view::board_view::Renderer 
         = view::board_view::Renderer::new((scrn_width/2 - 2*scrn_height/5).try_into().unwrap(), 
-            (scrn_height/10).try_into().unwrap(), 
+            (scrn_height/2 - 2*scrn_height/5).try_into().unwrap(), 
             scrn_height/5 * 4, scrn_height/5 * 4,
             &texture_creator).expect("Failed to create the renderer");
 
@@ -49,10 +49,10 @@ fn main() -> Result<(), String> {
                     running = false;
                 }
                 sdl2::event::Event::MouseButtonDown {x, y, ..} => {
-                    let x_from_left: i32 = x - board_view.board_area.x;
-                    let y_from_top: i32 = y - board_view.board_area.y;
-                    let click_radius: i32 = board_view.board_area.w / 12; // The radius of the click
-                    let cell_side: i32 = board_view.board_area.w / 4;
+                    let cell_side: i32 = board_view.board_area.w / 5;
+                    let x_from_left: i32 = x - board_view.board_area.x - cell_side/2;
+                    let y_from_top: i32 = y - board_view.board_area.y - cell_side/2;
+                    let click_radius: i32 = cell_side / 3; // The radius of the click
                     let x_shifted: i32 = x_from_left + click_radius;
                     let y_shifted: i32 = y_from_top + click_radius;
                     let col: usize = (x_shifted/cell_side).try_into().unwrap();

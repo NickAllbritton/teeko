@@ -66,10 +66,35 @@ impl<'a> Renderer<'a> {
 
     fn draw_lines(&self, canvas: &mut Canvas<Window>) {
 
-        let cell_width: i32 = self.board_area.w / 4;
-        let cell_height: i32 = self.board_area.h / 4;
-        let left: i32 = self.board_area.x; // x-position of left side of centered board
-        let top: i32 = self.board_area.y; // y-position of top side of centered board
+        // Draw the lines around the board
+        // Left side line
+        let _ = canvas.draw_line(
+            Point::new(self.board_area.x, self.board_area.y),
+            Point::new(self.board_area.x, self.board_area.y + self.board_area.h)
+        );
+        // Right side line
+        let _ = canvas.draw_line(
+            Point::new(self.board_area.x + self.board_area.w, self.board_area.y),
+            Point::new(self.board_area.x + self.board_area.w, self.board_area.y + self.board_area.h)
+        );
+        // Top side line
+        let _ = canvas.draw_line(
+            Point::new(self.board_area.x, self.board_area.y),
+            Point::new(self.board_area.x + self.board_area.w, self.board_area.y)
+        );
+        // Bottom side line
+        let _ = canvas.draw_line(
+            Point::new(self.board_area.x, self.board_area.y + self.board_area.h),
+            Point::new(self.board_area.x + self.board_area.w, self.board_area.y + self.board_area.h)
+        );
+
+
+
+
+        let cell_width: i32 = self.board_area.w / 5;
+        let cell_height: i32 = self.board_area.h / 5;
+        let left: i32 = self.board_area.x + cell_width/2; // x-position of left side of centered board
+        let top: i32 = self.board_area.y + cell_height/2; // y-position of top side of centered board
         let right: i32 = left + 4*cell_width;
         let bottom: i32 = top + 4*cell_height;
 
@@ -122,13 +147,13 @@ impl<'a> Renderer<'a> {
 
     fn draw_pieces(&self, canvas: &mut Canvas<Window>, board: &[[BoardPiece; 5]; 5]) {
         // Dimensions of a cell
-        let width: i32 = self.board_area.h / 4;
-        let height: i32 = self.board_area.h / 4;
+        let width: i32 = self.board_area.h / 5;
+        let height: i32 = self.board_area.h / 5;
         // Board width: (4 spaces between 5 lines)x(Cell width)
         // Centering of board involves halving the board width which is a factor of 4.
         // So simplify to 2xCell width (and similarly for height)
-        let left: i32 = self.board_area.x; // x-position of left side of centered board
-        let top: i32 = self.board_area.y; // y-position of top side of centered board
+        let left: i32 = self.board_area.x + width/2; // x-position of left side of centered board
+        let top: i32 = self.board_area.y + height/2; // y-position of top side of centered board
 
         let image = &self.pieces_texture;
         let image_attr = image.query();
