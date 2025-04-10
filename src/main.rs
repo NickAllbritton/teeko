@@ -6,8 +6,8 @@ use sdl2::image::LoadTexture;
 
 fn main() -> Result<(), String> {
   
-    let scrn_width: u32 = 1600;
-    let scrn_height: u32= 1200;
+    let scrn_width: u32 = 1800;
+    let scrn_height: u32= 1350;
 
     let sdl_context = sdl2::init()?;
     let vid_subsystem = sdl_context.video()?;
