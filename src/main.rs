@@ -27,7 +27,8 @@ fn main() -> Result<(), String> {
             scrn_height/5 * 4, scrn_height/5 * 4,
             &texture_creator).expect("Failed to create the renderer");
 
-    let background_texture = texture_creator.load_texture("resources/timber_planks.png").expect("Loading background texture");
+    // TODO: Use relative paths
+    let background_texture = texture_creator.load_texture("/home/nick/software/teeko/resources/timber_planks.png").expect("Loading background texture");
     let image_attr = background_texture.query();
     // Cut a source rect rom the texture
     let src_rect = sdl2::rect::Rect::new((image_attr.width - (scrn_width/scrn_height*image_attr.height)).try_into().unwrap(), 0, 

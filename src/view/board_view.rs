@@ -22,9 +22,11 @@ impl<'a> Renderer<'a> {
 
         //let grain_texture = tex_creator.load_texture("resources/wood_texture1.png");
         //let grain_texture = tex_creator.load_texture("resources/wood_texture2.png");
-        let grain_texture = tex_creator.load_texture("resources/wood_panel_texture.png");
+        // TODO: Find a way to use relative paths so that other people can install this game onto
+        // their system
+        let grain_texture = tex_creator.load_texture("/home/nick/software/teeko/resources/wood_panel_texture.png");
 
-        let piece_texture = tex_creator.load_texture("resources/checkers_piece_texture.png");
+        let piece_texture = tex_creator.load_texture("/home/nick/software/teeko/resources/checkers_piece_texture.png");
         Ok(Self {
             board_area: Rect::new(posx, posy, width, height),
             board_color: Color::RGB(158, 103, 68),
