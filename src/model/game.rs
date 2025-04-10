@@ -14,8 +14,9 @@ pub struct GameState {
     pub current_player: BoardPiece,
     pub pieces_dropped: [i32;2],
     pub phase2: bool,
+    pub win: bool,
     history: Vec<PieceDropCommand>,
-    history_pos: usize
+    history_pos: usize,
 }
 
 impl GameState {
@@ -26,6 +27,7 @@ impl GameState {
             current_player: BoardPiece::Black, // Black moves First
             pieces_dropped: [0, 0],
             phase2: false, // Begin in phase 1 not phase 2 because 2 is after 1
+            win: false, // Begin with no players having won
             history: Vec::new(),
             history_pos: 0
         }
@@ -152,8 +154,8 @@ impl PieceDropCommand {
             if game.pieces_dropped[game.index_of_piece(self.player)] < 4 {
                 if game.board[self.row][self.col] == BoardPiece::None {
                     // return false if the piece is more than 1 piece away
-                    let distancex: isize = isize::abs(<usize as TryInto<isize>>::try_into(game.history[game.history_pos].row).unwrap() - <usize as TryInto<isize>>::try_into(self.row).unwrap());
-                    let distancey: isize = isize::abs(<usize as TryInto<isize>>::try_into(game.history[game.history_pos].col).unwrap() - <usize as TryInto<isize>>::try_into(self.col).unwrap());
+                    let distancex: isize = isize::abs(<usize as TryInto<isize>>::try_into(game.history[game.history_pos].col).unwrap() - <usize as TryInto<isize>>::try_into(self.col).unwrap());
+                    let distancey: isize = isize::abs(<usize as TryInto<isize>>::try_into(game.history[game.history_pos].row).unwrap() - <usize as TryInto<isize>>::try_into(self.row).unwrap());
                     println!("Distance in the x: {}", distancex);
                     println!("Distance in the y: {}", distancey);
                     let within_one_move: bool = distancex <= 1 && distancey <= 1;
