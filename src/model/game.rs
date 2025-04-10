@@ -48,7 +48,6 @@ impl GameState {
             }
         }
         command.perform(self);
-        self.change_phase_if_nec();
         self.history.push(command);
         self.history_pos = self.history.len() - 1;
     }
@@ -62,7 +61,6 @@ impl GameState {
 
         let command: PieceDropCommand = self.history[self.history_pos].copy();
         command.perform(self);
-        self.change_phase_if_nec();
     }
 
     pub fn undo_action(&mut self) {
@@ -81,10 +79,11 @@ impl GameState {
         }
     }
 
-    fn change_phase_if_nec(&mut self)
+    pub fn change_phase_if_nec(&mut self)
     {
         // if at least 8 pieces have been dropped -> go phase2
-        self.phase2 = self.pieces_dropped[0] + self.pieces_dropped[1] >= 8; 
+        self.phase2 = self.pieces_dropped[0] + self.pieces_dropped[1] == 8 ||
+            (self.pieces_dropped[0] + self.pieces_dropped[1] == 7 && self.history[self.history_pos].player != self.current_player); 
     }
 
     fn next_player(&mut self) {
@@ -113,10 +112,10 @@ struct PieceDropCommand {
 impl PieceDropCommand {
 
     pub fn perform(&self, game: &mut GameState) {
-        if game.phase2 {
-            game.board[self.row][self.col] = BoardPiece::None;
-            game.pieces_dropped[game.index_of_piece(game.current_player)] -= 1; // Remove a piece 
-            game.current_player = self.player;
+        if game.phase2 && game.pieces_dropped[0]+game.pieces_dropped[1]==8{
+            self.undo(game);
+            // Do not switch players!
+            // Do not change phase!
             println!("Perform piece remove");
         }
         else {
@@ -124,6 +123,7 @@ impl PieceDropCommand {
             game.pieces_dropped[game.index_of_piece(game.current_player)] += 1; // Add a piece to the
                                                                                 // tracker variable
             game.next_player();
+            game.change_phase_if_nec();
             println!("Perform piece placement");
         }
     }
@@ -140,21 +140,49 @@ impl PieceDropCommand {
     }
 
     pub fn is_valid(&self, game: & GameState) -> bool {
+        println!("Selected ({}, {})", self.row, self.col);
         if self.row > 4 || self.col > 4 {
             return false;
         }
-        // First move cannot be the center of the board
-        if game.pieces_dropped[game.index_of_piece(BoardPiece::Black)] == 0 
-            && self.row == 2 && self.col == 2 {
-            return false;
+        if game.phase2 {
+            println!("Phase 2");
+            // Phase 2
+            // if it is in phase 2 but does not have 4 pieces placed, that means the player has
+            // removed a piece
+            if game.pieces_dropped[game.index_of_piece(self.player)] < 4 {
+                if game.board[self.row][self.col] == BoardPiece::None {
+                    // return false if the piece is more than 1 piece away
+                    let distancex: isize = isize::abs(<usize as TryInto<isize>>::try_into(game.history[game.history_pos].row).unwrap() - <usize as TryInto<isize>>::try_into(self.row).unwrap());
+                    let distancey: isize = isize::abs(<usize as TryInto<isize>>::try_into(game.history[game.history_pos].col).unwrap() - <usize as TryInto<isize>>::try_into(self.col).unwrap());
+                    println!("Distance in the x: {}", distancex);
+                    println!("Distance in the y: {}", distancey);
+                    let within_one_move: bool = distancex <= 1 && distancey <= 1;
+                    println!("The selected spot is less than 2 moves away: {}", within_one_move);
+                    return within_one_move;
+                }
+                else {
+                    // If the player has removed a piece they cannot place one on any non-empty
+                    // place
+                    println!("Phase 2 but the selected position is not empty");
+                    return false;
+                }
+            }
+            else {
+                // if all 4 of your pieces are down in phase 2 you need to remove a piece
+                return game.board[self.row][self.col] == self.player; // are your removing your own
+                                                                      // piece?
+            }
         }
-        if game.board[self.row][self.col] != BoardPiece::None && !game.phase2 {
-            return false;
+        else {
+            println!("Phase 1");
+            // Phase 1
+            // If black has not placed any pieces, it is first move. First move cannot be the
+            // center 
+            if game.pieces_dropped[game.index_of_piece(BoardPiece::Black)] == 0 {
+                return self.row != 2 || self.col !=2;
+            }
         }
-        if game.board[self.row][self.col] != self.player && game.phase2 {
-            return false;
-        }
-        return true; // you cannot place a new piece unless you are in phase 1
+        return true;
     }
 
     pub fn copy(&self) -> Self {
